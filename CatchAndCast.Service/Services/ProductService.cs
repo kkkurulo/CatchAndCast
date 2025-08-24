@@ -83,7 +83,12 @@ public class ProductService : IProductService
 
     public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(GetByCategory dto)
     {
-        return await context.Products.Where(x => x.CategoryId == dto.CategoryId).ToListAsync();
+        var products = await context.Products.Where(x => x.CategoryId == dto.CategoryId).ToListAsync();
+        if (products == null || products.Count == 0)
+        {
+            throw new ItemNotFound();
+        }
+        return products;
     }
 
 
